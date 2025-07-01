@@ -3,23 +3,29 @@ set -e
 
 until mc alias set minio http://$MINIO_HOST:$MINIO_PORT $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
 do
-  echo "Ожидание доступности MinIO..."
-  sleep 2
+  echo "Waiting for MinIO to become available..."
+  sleep 1
 done
 
-echo "Создание бакета..."
+echo "Creating bucket..."
 mc mb minio/$MINIO_BUCKET --ignore-existing
 mc policy set public minio/$MINIO_BUCKET
 
-echo "Загрузка тестовых данных..."
-mc cp -r /test-data/ minio/$MINIO_BUCKET/
+echo "Uploading test data..."
 
-echo "Проверка загруженных данных..."
-FILE_COUNT=$(mc ls minio/$MINIO_BUCKET_NAME/test-data/ | wc -l)
-if [ "$FILE_COUNT" -eq "0" ]; then
-  echo "ОШИБКА: Файлы не загружены!"
+TOTAL_FILES=$(find /test-data -type f | wc -l)
+echo "Found $TOTAL_FILES files to upload"
+
+mc cp -r /test-data/ minio/$MINIO_BUCKET/test-data/
+
+echo "Verifying uploaded data..."
+
+LOADED_FILES=$(mc ls -r minio/$MINIO_BUCKET/test-data/ | wc -l)
+
+if [ "$LOADED_FILES" -ne "$TOTAL_FILES" ]; then
+  echo "ERROR: uploaded only $LOADED_FILES/$TOTAL_FILES files"
   exit 1
 fi
 
-echo "Успешно загружено $FILE_COUNT файлов"
+echo "Successfully uploaded $LOADED_FILES/$TOTAL_FILES files"
 exit 0
