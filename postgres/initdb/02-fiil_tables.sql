@@ -40,10 +40,10 @@ INSERT INTO books_genres (book_id, genre_id) VALUES
 (4, 4);
 
 INSERT INTO books_locations (book_id, extension_id, location) VALUES 
-(1, 1, '/1.pdf'),
-(2, 2, '/2.epub'),
-(3, 3, '/3.fb2'),
-(4, 2, '/4.epub');
+(1, 1, '1.pdf'),
+(2, 2, '2.epub'),
+(3, 3, '3.fb2'),
+(4, 2, '4.epub');
 
 INSERT INTO favourite_books (user_id, book_id, added_ts) VALUES 
 (1, 1, '2025-07-02T10:23:54'),
