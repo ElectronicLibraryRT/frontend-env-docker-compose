@@ -42,7 +42,7 @@ services:
       - ./minio/init-minio.sh:/init-minio.sh
 
   backend:
-    image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE}
+    image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE}:dev
     env_file: .env.backend
     networks:
       - app-network
